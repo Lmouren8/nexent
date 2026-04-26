@@ -26,6 +26,10 @@ export const API_ENDPOINTS = {
     link: `${API_BASE_URL}/user/oauth/link`,
     accounts: `${API_BASE_URL}/user/oauth/accounts`,
     unlink: (provider: string) => `${API_BASE_URL}/user/oauth/accounts/${provider}`,
+    ssoConfig: `${API_BASE_URL}/user/oauth/sso/config`,
+    ssoStatus: `${API_BASE_URL}/user/oauth/sso/status`,
+    ssoReauthorize: `${API_BASE_URL}/user/oauth/sso/reauthorize`,
+    workflowConfig: `${API_BASE_URL}/user/oauth/workflow/config`,
   },
   conversation: {
     list: `${API_BASE_URL}/conversation/list`,

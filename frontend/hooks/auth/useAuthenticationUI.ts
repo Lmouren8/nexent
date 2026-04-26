@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 
@@ -9,6 +9,7 @@ import { AUTH_EVENTS } from "@/const/auth";
 import { getEffectiveRoutePath } from "@/lib/auth";
 import { authEvents, authEventUtils } from "@/lib/authEvents";
 import { AuthenticationUIReturn } from "@/types/auth";
+import { oauthService } from "@/services/oauthService";
 import log from "@/lib/logger";
 
 /**
@@ -36,14 +37,23 @@ export function useAuthenticationUI({
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   const [isAuthPromptModalOpen, setIsAuthPromptModalOpen] = useState(false);
   const [isSessionExpiredModalOpen, setIsSessionExpiredModalOpen] = useState(false);
+  const [ssoConfig, setSsoConfig] = useState<{ sso_enabled: boolean; sso_provider: string } | null>(null);
+
+  useEffect(() => {
+    const fetchSSOConfig = async () => {
+      try {
+        const config = await oauthService.getSSOConfig();
+        setSsoConfig(config);
+      } catch (error) {
+        log.error("Failed to fetch SSO config:", error);
+      }
+    };
+    fetchSSOConfig();
+  }, []);
 
   const handleUnauthenticatedModalClose = (() => {
-    // Only emit back to home event and redirect if user is not authenticated
     if (!isAuthenticated && !isSpeedMode) {
-        
-      // Emit event to notify SideNavigation to reset selected key
       authEventUtils.emitBackToHome();
-      // Redirect to home page if not already there
       const effectivePath = pathname ? getEffectiveRoutePath(pathname) : "/";
       if (effectivePath !== "/") {
         router.push("/");
@@ -92,7 +102,6 @@ export function useAuthenticationUI({
       setIsRegisterModalOpen(false);
     };
 
-    // Add event listener using type-safe auth events
     const cleanup = authEvents.on(
       AUTH_EVENTS.SESSION_EXPIRED,
       handleSessionExpired
@@ -102,7 +111,6 @@ export function useAuthenticationUI({
       handleRegisterSuccess
     );
 
-    // Return cleanup function
     return () => {
       cleanup();
       cleanupRegister();
@@ -128,18 +136,22 @@ export function useAuthenticationUI({
   }, [searchParams, isAuthChecking, isAuthenticated, isSpeedMode, isLoginModalOpen, router]);
 
   // Route guard for unauthenticated users - check when pathname changes
+  // When SSO is enabled, skip showing auth prompt modal and let user browse freely
   useEffect(() => {
     if (isSpeedMode) return;
-    // Skip while checking auth state
     if (isAuthChecking) return;
-    // Skip if user is authenticated
     if (isAuthenticated) return;
-    // Skip if session expired modal is already showing (avoid duplicate modals)
     if (isSessionExpiredModalOpen) return;
     if (isLoginModalOpen) return;
     if (isRegisterModalOpen) return;
+
+    // If SSO config is still loading or SSO is enabled, skip showing auth prompt modal
+    if (ssoConfig === null || ssoConfig?.sso_enabled) {
+      return;
+    }
+
     openAuthPromptModal();
-  }, [pathname, isAuthenticated, isSpeedMode, isAuthChecking, isSessionExpiredModalOpen, openAuthPromptModal]);
+  }, [pathname, isAuthenticated, isSpeedMode, isAuthChecking, isSessionExpiredModalOpen, openAuthPromptModal, ssoConfig]);
 
 
   return {

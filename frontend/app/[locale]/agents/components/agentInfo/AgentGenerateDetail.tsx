@@ -987,7 +987,7 @@ export default function AgentGenerateDetail({
                     {
                       type: "number",
                       min: 1,
-                      max: 20,
+                      max: 100,
                       message: t("businessLogic.config.maxSteps"),
                     },
                   ]}
@@ -995,7 +995,7 @@ export default function AgentGenerateDetail({
                 >
                   <InputNumber
                     min={1}
-                    max={20}
+                    max={100}
                     style={{ width: "100%" }}
                     onBlur={() => {
                       const value = form.getFieldValue("mainAgentMaxStep");
