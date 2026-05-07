@@ -119,6 +119,7 @@ class ModelRequest(BaseModel):
     maximum_chunk_size: Optional[int] = None
     chunk_batch: Optional[int] = None
     timeout_seconds: Optional[int] = None
+    concurrency_limit: Optional[int] = None
 
 
 class ProviderModelRequest(BaseModel):
@@ -755,6 +756,7 @@ class ManageTenantModelCreateRequest(BaseModel):
     maximum_chunk_size: Optional[int] = Field(None, description="Maximum chunk size for embedding models")
     chunk_batch: Optional[int] = Field(None, description="Batch size for chunking")
     timeout_seconds: Optional[int] = Field(None, description="Request timeout in seconds")
+    concurrency_limit: Optional[int] = Field(None, description="Maximum concurrent requests for this model")
 
 
 class ManageTenantModelUpdateRequest(BaseModel):
@@ -773,6 +775,7 @@ class ManageTenantModelUpdateRequest(BaseModel):
     maximum_chunk_size: Optional[int] = Field(None, description="Maximum chunk size for embedding models")
     chunk_batch: Optional[int] = Field(None, description="Batch size for chunking")
     timeout_seconds: Optional[int] = Field(None, description="Request timeout in seconds")
+    concurrency_limit: Optional[int] = Field(None, description="Maximum concurrent requests for this model")
 
 
 class ManageTenantModelDeleteRequest(BaseModel):

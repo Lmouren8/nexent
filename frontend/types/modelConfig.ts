@@ -47,6 +47,7 @@ export interface ModelOption {
   maximumChunkSize?: number;
   chunkingBatchSize?: number;
   timeoutSeconds?: number;
+  concurrencyLimit?: number;
 }
 
 // Application configuration interface

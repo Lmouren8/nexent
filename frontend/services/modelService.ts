@@ -69,6 +69,7 @@ export const modelService = {
           maximumChunkSize: model.maximum_chunk_size,
           chunkingBatchSize: model.chunk_batch,
           timeoutSeconds: model.timeout_seconds,
+          concurrencyLimit: model.concurrency_limit,
         }));
       }
       return [];
@@ -101,6 +102,7 @@ export const modelService = {
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
     timeoutSeconds?: number;
+    concurrencyLimit?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(API_ENDPOINTS.model.customModelCreate, {
@@ -118,6 +120,7 @@ export const modelService = {
           maximum_chunk_size: model.maximumChunkSize,
           chunk_batch: model.chunkingBatchSize,
           timeout_seconds: model.timeoutSeconds,
+          concurrency_limit: model.concurrencyLimit,
         }),
       });
 
@@ -294,6 +297,7 @@ export const modelService = {
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
     timeoutSeconds?: number;
+    concurrencyLimit?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(
@@ -323,6 +327,9 @@ export const modelService = {
             ...(model.timeoutSeconds !== undefined
               ? { timeout_seconds: model.timeoutSeconds }
               : {}),
+            ...(model.concurrencyLimit !== undefined
+              ? { concurrency_limit: model.concurrencyLimit }
+              : {}),
           }),
         }
       );
@@ -345,6 +352,7 @@ export const modelService = {
       apiKey: string;
       maxTokens?: number;
       timeoutSeconds?: number;
+      concurrencyLimit?: number;
     }[],
     provider?: string
   ): Promise<any> => {
@@ -358,6 +366,7 @@ export const modelService = {
             api_key: m.apiKey,
             ...(m.maxTokens !== undefined ? { max_tokens: m.maxTokens } : {}),
             ...(m.timeoutSeconds !== undefined ? { timeout_seconds: m.timeoutSeconds } : {}),
+            ...(m.concurrencyLimit !== undefined ? { concurrency_limit: m.concurrencyLimit } : {}),
             ...(provider ? { model_factory: provider } : {}),
           }))
         ),
@@ -600,6 +609,7 @@ export const modelService = {
             maximumChunkSize: model.maximum_chunk_size,
             chunkingBatchSize: model.chunk_batch,
             timeoutSeconds: model.timeout_seconds,
+            concurrencyLimit: model.concurrency_limit,
           })),
           total: result.data.total || 0,
           page: result.data.page || 1,
@@ -644,6 +654,7 @@ export const modelService = {
     chunkingBatchSize?: number;
     modelFactory?: string;
     timeoutSeconds?: number;
+    concurrencyLimit?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(API_ENDPOINTS.model.manageModelCreate, {
@@ -666,6 +677,7 @@ export const modelService = {
           maximum_chunk_size: params.maximumChunkSize,
           chunk_batch: params.chunkingBatchSize,
           timeout_seconds: params.timeoutSeconds,
+          concurrency_limit: params.concurrencyLimit,
         }),
       });
 
@@ -696,6 +708,7 @@ export const modelService = {
     chunkingBatchSize?: number;
     modelFactory?: string;
     timeoutSeconds?: number;
+    concurrencyLimit?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(
@@ -718,6 +731,7 @@ export const modelService = {
             ...(params.maximumChunkSize !== undefined ? { maximum_chunk_size: params.maximumChunkSize } : {}),
             ...(params.chunkingBatchSize !== undefined ? { chunk_batch: params.chunkingBatchSize } : {}),
             ...(params.timeoutSeconds !== undefined ? { timeout_seconds: params.timeoutSeconds } : {}),
+            ...(params.concurrencyLimit !== undefined ? { concurrency_limit: params.concurrencyLimit } : {}),
           }),
         }
       );
