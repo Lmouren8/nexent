@@ -716,6 +716,7 @@
   "model.dialog.label.url": "模型URL",
   "model.dialog.label.apiKey": "API Key",
   "model.dialog.label.maxTokens": "最大Token数",
+  "model.dialog.label.timeoutSeconds": "超时时间(秒)",
   "model.dialog.label.batchImport": "批量添加模型",
   "model.dialog.label.provider": "模型提供商",
   "model.dialog.label.currentlySupported": "当前已支持：",

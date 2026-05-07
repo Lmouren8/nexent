@@ -46,6 +46,7 @@ export interface ModelOption {
   expectedChunkSize?: number;
   maximumChunkSize?: number;
   chunkingBatchSize?: number;
+  timeoutSeconds?: number;
 }
 
 // Application configuration interface

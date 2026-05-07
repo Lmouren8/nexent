@@ -178,6 +178,8 @@ class ModelRecord(TableBase):
         Boolean, default=True, doc="Whether to verify SSL certificates when connecting to this model API. Default is true. Set to false for local services without SSL support.")
     chunk_batch = Column(
         Integer, doc="Batch size for concurrent embedding requests during document chunking")
+    timeout_seconds = Column(
+        Integer, doc="Request timeout in seconds for this model. Default is 120 seconds.")
 
 
 class ModelMonitoringRecord(SimpleTableBase):

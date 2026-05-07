@@ -715,6 +715,7 @@
   "model.dialog.label.url": "Model URL",
   "model.dialog.label.apiKey": "API Key",
   "model.dialog.label.maxTokens": "Max Tokens",
+  "model.dialog.label.timeoutSeconds": "Timeout (seconds)",
   "model.dialog.label.batchImport": "Batch Add",
   "model.dialog.label.provider": "Model Provider",
   "model.dialog.label.currentlySupported": "Currently supported:",

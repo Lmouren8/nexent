@@ -68,6 +68,7 @@ export const modelService = {
           expectedChunkSize: model.expected_chunk_size,
           maximumChunkSize: model.maximum_chunk_size,
           chunkingBatchSize: model.chunk_batch,
+          timeoutSeconds: model.timeout_seconds,
         }));
       }
       return [];
@@ -99,6 +100,7 @@ export const modelService = {
     expectedChunkSize?: number;
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
+    timeoutSeconds?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(API_ENDPOINTS.model.customModelCreate, {
@@ -115,6 +117,7 @@ export const modelService = {
           expected_chunk_size: model.expectedChunkSize,
           maximum_chunk_size: model.maximumChunkSize,
           chunk_batch: model.chunkingBatchSize,
+          timeout_seconds: model.timeoutSeconds,
         }),
       });
 
@@ -290,6 +293,7 @@ export const modelService = {
     expectedChunkSize?: number;
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
+    timeoutSeconds?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(
@@ -316,6 +320,9 @@ export const modelService = {
             ...(model.chunkingBatchSize !== undefined
               ? { chunk_batch: model.chunkingBatchSize }
               : {}),
+            ...(model.timeoutSeconds !== undefined
+              ? { timeout_seconds: model.timeoutSeconds }
+              : {}),
           }),
         }
       );
@@ -337,6 +344,7 @@ export const modelService = {
       model_id: string;
       apiKey: string;
       maxTokens?: number;
+      timeoutSeconds?: number;
     }[],
     provider?: string
   ): Promise<any> => {
@@ -349,6 +357,7 @@ export const modelService = {
             model_id: m.model_id,
             api_key: m.apiKey,
             ...(m.maxTokens !== undefined ? { max_tokens: m.maxTokens } : {}),
+            ...(m.timeoutSeconds !== undefined ? { timeout_seconds: m.timeoutSeconds } : {}),
             ...(provider ? { model_factory: provider } : {}),
           }))
         ),
@@ -590,6 +599,7 @@ export const modelService = {
             expectedChunkSize: model.expected_chunk_size,
             maximumChunkSize: model.maximum_chunk_size,
             chunkingBatchSize: model.chunk_batch,
+            timeoutSeconds: model.timeout_seconds,
           })),
           total: result.data.total || 0,
           page: result.data.page || 1,
@@ -633,6 +643,7 @@ export const modelService = {
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
     modelFactory?: string;
+    timeoutSeconds?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(API_ENDPOINTS.model.manageModelCreate, {
@@ -654,6 +665,7 @@ export const modelService = {
           expected_chunk_size: params.expectedChunkSize,
           maximum_chunk_size: params.maximumChunkSize,
           chunk_batch: params.chunkingBatchSize,
+          timeout_seconds: params.timeoutSeconds,
         }),
       });
 
@@ -683,6 +695,7 @@ export const modelService = {
     maximumChunkSize?: number;
     chunkingBatchSize?: number;
     modelFactory?: string;
+    timeoutSeconds?: number;
   }): Promise<void> => {
     try {
       const response = await fetch(
@@ -704,6 +717,7 @@ export const modelService = {
             ...(params.expectedChunkSize !== undefined ? { expected_chunk_size: params.expectedChunkSize } : {}),
             ...(params.maximumChunkSize !== undefined ? { maximum_chunk_size: params.maximumChunkSize } : {}),
             ...(params.chunkingBatchSize !== undefined ? { chunk_batch: params.chunkingBatchSize } : {}),
+            ...(params.timeoutSeconds !== undefined ? { timeout_seconds: params.timeoutSeconds } : {}),
           }),
         }
       );
