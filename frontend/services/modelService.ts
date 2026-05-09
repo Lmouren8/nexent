@@ -365,6 +365,7 @@ export const modelService = {
               : {}),
             ...(model.concurrencyLimit !== undefined
               ? { concurrency_limit: model.concurrencyLimit }
+              : {}),
             ...(model.modelFactory !== undefined
               ? { model_factory: model.modelFactory }
               : {}),
