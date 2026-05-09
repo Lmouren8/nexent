@@ -123,6 +123,8 @@ export const modelService = {
         expected_chunk_size: model.expectedChunkSize,
         maximum_chunk_size: model.maximumChunkSize,
         chunk_batch: model.chunkingBatchSize,
+        timeout_seconds: model.timeoutSeconds,
+        concurrency_limit: model.concurrencyLimit,
       };
 
       // Add STT specific fields
@@ -139,20 +141,6 @@ export const modelService = {
       const response = await fetch(API_ENDPOINTS.model.customModelCreate, {
         method: "POST",
         headers: getAuthHeaders(),
-        body: JSON.stringify({
-          model_repo: "",
-          model_name: model.name,
-          model_type: model.type,
-          base_url: model.url,
-          api_key: model.apiKey,
-          max_tokens: model.maxTokens,
-          display_name: model.displayName,
-          expected_chunk_size: model.expectedChunkSize,
-          maximum_chunk_size: model.maximumChunkSize,
-          chunk_batch: model.chunkingBatchSize,
-          timeout_seconds: model.timeoutSeconds,
-          concurrency_limit: model.concurrencyLimit,
-        }),
         body: JSON.stringify(requestBody),
       });
 
@@ -734,9 +722,12 @@ export const modelService = {
         api_key: params.apiKey,
         max_tokens: params.maxTokens || 4096,
         display_name: params.displayName || params.name,
+        model_factory: params.modelFactory || "OpenAI-API-Compatible",
         expected_chunk_size: params.expectedChunkSize,
         maximum_chunk_size: params.maximumChunkSize,
         chunk_batch: params.chunkingBatchSize,
+        timeout_seconds: params.timeoutSeconds,
+        concurrency_limit: params.concurrencyLimit,
       };
 
       // Add STT specific fields
@@ -756,22 +747,6 @@ export const modelService = {
           ...getAuthHeaders(),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          tenant_id: params.tenantId,
-          model_repo: "",
-          model_name: params.name,
-          model_type: params.type,
-          base_url: params.url,
-          api_key: params.apiKey,
-          max_tokens: params.maxTokens || 4096,
-          display_name: params.displayName || params.name,
-          model_factory: params.modelFactory || "OpenAI-API-Compatible",
-          expected_chunk_size: params.expectedChunkSize,
-          maximum_chunk_size: params.maximumChunkSize,
-          chunk_batch: params.chunkingBatchSize,
-          timeout_seconds: params.timeoutSeconds,
-          concurrency_limit: params.concurrencyLimit,
-        }),
         body: JSON.stringify(requestBody),
       });
 
