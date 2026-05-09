@@ -697,10 +697,7 @@ export const ModelAddDialog = ({
           concurrencyLimit: !isEmbeddingModel && !isRerankModel
             ? form.concurrencyLimit ? parseInt(form.concurrencyLimit) : undefined
             : undefined,
-        });
         };
-
-        // Add STT specific fields
         if (form.type === MODEL_TYPES.STT) {
           modelParams.modelFactory = form.sttProvider === "volcengine" ? "volcengine" : "dashscope";
           if (form.sttProvider === "volcengine") {
@@ -740,7 +737,6 @@ export const ModelAddDialog = ({
                 concurrencyLimit: form.concurrencyLimit ? parseInt(form.concurrencyLimit) : undefined,
               }
             : {}),
-        });
         };
 
         // Add STT specific fields
