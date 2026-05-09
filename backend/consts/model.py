@@ -120,6 +120,9 @@ class ModelRequest(BaseModel):
     chunk_batch: Optional[int] = None
     timeout_seconds: Optional[int] = None
     concurrency_limit: Optional[int] = None
+    # STT specific fields
+    model_appid: Optional[str] = None
+    access_token: Optional[str] = None
 
 
 class ProviderModelRequest(BaseModel):
@@ -149,14 +152,23 @@ class SingleModelConfig(BaseModel):
     dimension: Optional[int] = None
 
 
+class STTModelConfig(BaseModel):
+    """STT model specific configuration with factory, appid, and access token fields"""
+    modelName: str
+    displayName: str
+    apiConfig: Optional[ModelApiConfig] = None
+    modelFactory: Optional[str] = None
+    modelAppid: Optional[str] = None
+    accessToken: Optional[str] = None
+
+
 class ModelConfig(BaseModel):
     llm: SingleModelConfig
     embedding: SingleModelConfig
     multiEmbedding: SingleModelConfig
     rerank: SingleModelConfig
     vlm: SingleModelConfig
-    stt: SingleModelConfig
-    tts: SingleModelConfig
+    stt: STTModelConfig
 
 
 class AppConfig(BaseModel):
@@ -494,7 +506,7 @@ class MemoryAgentShareMode(str, Enum):
 class VoiceConnectivityRequest(BaseModel):
     """Request model for voice service connectivity check"""
     model_type: str = Field(...,
-                            description="Type of model to check ('stt' or 'tts')")
+                            description="Type of model to check ('stt')")
 
 
 class VoiceConnectivityResponse(BaseModel):
@@ -503,19 +515,6 @@ class VoiceConnectivityResponse(BaseModel):
                             description="Whether the service is connected")
     model_type: str = Field(..., description="Type of model checked")
     message: str = Field(..., description="Status message")
-
-
-class TTSRequest(BaseModel):
-    """Request model for TTS text-to-speech conversion"""
-    text: str = Field(..., min_length=1,
-                      description="Text to convert to speech")
-    stream: bool = Field(True, description="Whether to stream the audio")
-
-
-class TTSResponse(BaseModel):
-    """Response model for TTS conversion"""
-    status: str = Field(..., description="Status of the TTS conversion")
-    message: Optional[str] = Field(None, description="Additional message")
 
 
 class ToolValidateRequest(BaseModel):
@@ -746,17 +745,20 @@ class ManageTenantModelCreateRequest(BaseModel):
     tenant_id: str = Field(..., min_length=1, description="Target tenant ID to create model for")
     model_repo: Optional[str] = Field('', description="Model repository path")
     model_name: str = Field(..., description="Model name")
-    model_type: str = Field(..., description="Model type (e.g., 'llm', 'embedding', 'vlm', 'tts', 'stt')")
+    model_type: str = Field(..., description="Model type (e.g., 'llm', 'embedding', 'vlm', 'stt')")
     api_key: Optional[str] = Field('', description="API key for the model")
     base_url: Optional[str] = Field('', description="Base URL for the model API")
     max_tokens: Optional[int] = Field(0, description="Maximum tokens for the model")
     display_name: Optional[str] = Field('', description="Display name for the model")
-    model_factory: Optional[str] = Field('OpenAI-API-Compatible', description="Model factory/provider name")
+    model_factory: Optional[str] = Field(None, description="Model factory/vendor for the model")
     expected_chunk_size: Optional[int] = Field(None, description="Expected chunk size for embedding models")
     maximum_chunk_size: Optional[int] = Field(None, description="Maximum chunk size for embedding models")
     chunk_batch: Optional[int] = Field(None, description="Batch size for chunking")
     timeout_seconds: Optional[int] = Field(None, description="Request timeout in seconds")
     concurrency_limit: Optional[int] = Field(None, description="Maximum concurrent requests for this model")
+    # STT specific fields
+    model_appid: Optional[str] = Field(None, description="Application ID for STT models (e.g., Volcano Engine)")
+    access_token: Optional[str] = Field(None, description="Access token for STT models (e.g., Volcano Engine)")
 
 
 class ManageTenantModelUpdateRequest(BaseModel):
@@ -770,12 +772,15 @@ class ManageTenantModelUpdateRequest(BaseModel):
     base_url: Optional[str] = Field(None, description="Base URL for the model API")
     max_tokens: Optional[int] = Field(None, description="Maximum tokens for the model")
     display_name: Optional[str] = Field(None, description="New display name for the model")
-    model_factory: Optional[str] = Field(None, description="Model factory/provider name")
+    model_factory: Optional[str] = Field(None, description="Model factory/vendor for the model")
     expected_chunk_size: Optional[int] = Field(None, description="Expected chunk size for embedding models")
     maximum_chunk_size: Optional[int] = Field(None, description="Maximum chunk size for embedding models")
     chunk_batch: Optional[int] = Field(None, description="Batch size for chunking")
     timeout_seconds: Optional[int] = Field(None, description="Request timeout in seconds")
     concurrency_limit: Optional[int] = Field(None, description="Maximum concurrent requests for this model")
+    # STT specific fields
+    model_appid: Optional[str] = Field(None, description="Application ID for STT models")
+    access_token: Optional[str] = Field(None, description="Access token for STT models")
 
 
 class ManageTenantModelDeleteRequest(BaseModel):
